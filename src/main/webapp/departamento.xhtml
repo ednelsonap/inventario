@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="titulo">
+		<title>Departamento</title>
+	</ui:define>
+
+
+	<ui:define name="conteudo">
+		<div align="center">
+			<h:form id="formDepartamento">
+				<p:growl id="growl" life="2000" />
+
+				<p:fieldset legend="Dados do Departamento"
+					style="margin-bottom:20px; width: 30%;">
+
+					<h:panelGrid columns="2">
+						<p:outputLabel value="Unidade: " for="nome" />
+						<p:selectOneMenu value="#{departamentoBean.departamento.unidade}"
+							required="true" requiredMessage="Unidade é um campo obrigatório">
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItems value="#{departamentoBean.unidades}" var="unidade"
+								itemLabel="#{unidade.nome}" itemValue="#{unidade}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel value="Departamento:" for="nome" />
+						<p:inputText id="nome"
+							value="#{departamentoBean.departamento.nome}" required="true"
+							requiredMessage="O campo departamento é obrigatório">
+						</p:inputText>
+
+						<p:commandButton value="Salvar"
+							action="#{departamentoBean.salvar}" style="margin-right:20px;"
+							ajax="false" process="@formDepartamento"
+							update="@formDepartamento :formTabelaDepartamentos" />
+
+					</h:panelGrid>
+				</p:fieldset>
+			</h:form>
+			<h:form id="formTabelaDepartamentos">
+				<p:growl id="growl" life="2000" />
+				<p:dataTable id="tabelaDepartamentos" var="departamento"
+					value="#{departamentoBean.departamentos}"
+					emptyMessage="Nenhuma Departamento Cadastrada"
+					style="margin-bottom:20px; text-align:center; width: 30%;">
+
+					<p:column headerText="Unidade"
+						style="text-align:left; width: 100px;">
+						<h:outputText value="#{departamento.unidade.nome}" />
+					</p:column>
+
+					<p:column headerText="Departamento" style="text-align:left;">
+						<h:outputText value="#{departamento.nome}" />
+					</p:column>
+
+					<p:column headerText="Ações" style="width: 125px;">
+						<h:panelGrid columns="2" style="float:right;padding-top: 5px;">
+							<p:commandButton icon="ui-icon-pencil" update=":formDepartamento" ajax="false" >
+								<f:setPropertyActionListener value="#{departamento}"
+									target="#{departamentoBean.departamento}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-trash"
+								action="#{departamentoBean.remover(departamento)}" ajax="false"
+								update="@form:tabelaDepartamentos" />
+						</h:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

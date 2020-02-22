@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+		<title>Usuário</title>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<div align="center">
+			<h:form id="formUsuario">
+
+				<p:fieldset legend="Dados da Usuário"
+					style="margin-bottom:20px; width: 30%;">
+					<h:panelGrid columns="2">
+
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome" value="#{usuarioBean.usuario.nome}"
+							required="true" requiredMessage="O nome é obrigatório">
+						</p:inputText>
+						
+						<p:outputLabel value="Login:" for="login" />
+						<p:inputText id="login" value="#{usuarioBean.usuario.login}"
+							required="true" requiredMessage="O nome é obrigatório">
+						</p:inputText>
+						
+						<p:outputLabel value="Senha:" for="senha" />
+						<p:password id="senha" value="#{usuarioBean.usuario.senha}"
+							feedback="true" required="true" />
+						
+						<p:commandButton value="Salvar" action="#{usuarioBean.salvar}" ajax="false"
+							process="formUsuario" update=":formTabelaUsuarios:tabelaUsuarios" />
+
+					</h:panelGrid>
+				</p:fieldset>
+
+			</h:form>
+			<h:form id="formTabelaUsuarios">
+
+				<p:dataTable id="tabelaUsuarios" var="usuario"
+					value="#{usuarioBean.usuarios}" emptyMessage="Nenhuma Usuario Cadastrado"
+					style="margin-bottom:20px; text-align:center; width: 30%;">
+
+					<p:column headerText="Usuário" style="text-align:left;">
+						<h:outputText value="#{usuario.nome}" />
+					</p:column>
+
+					<p:column headerText="Ações" style="width: 125px;">
+						<h:panelGrid columns="2" style="float:right;padding-top: 5px;">
+							<p:commandButton icon="ui-icon-pencil" update=":formUsuario" ajax="false">
+								<f:setPropertyActionListener value="#{usuario}"
+									target="#{usuarioBean.usuario}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-trash" ajax="false"
+								action="#{usuarioBean.remover(usuario)}" update="@form" />
+						</h:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

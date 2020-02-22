@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+		<title>Fornecedor</title>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<div align="center">
+			<h:form id="formFornecedor">
+				<p:growl id="growl" life="2000" />
+				<p:fieldset legend="Dados do Fornecedor" style="margin-bottom:20px; width: 30%;">
+					<h:panelGrid columns="3">
+
+						<p:outputLabel value="Fornecedor:" for="nome" />
+						<p:inputText id="nome" value="#{fornecedorBean.fornecedor.nome}"
+							required="true" requiredMessage="O campo nome é obrigatório">
+						</p:inputText>
+
+						<p:commandButton value="Salvar" action="#{fornecedorBean.salvar}" ajax="false"
+							process="formFornecedor" update=":formTabelaFornecedores:tabelaFornecedores" />
+
+					</h:panelGrid>
+				</p:fieldset>
+			</h:form>
+			<h:form id="formTabelaFornecedores">
+				<p:growl id="growl" life="2000" />
+				<p:dataTable id="tabelaFornecedores" var="fornecedor"
+					value="#{fornecedorBean.fornecedores}"
+					emptyMessage="Nenhuma Fornecedor Cadastrado"
+					style="margin-bottom:20px; text-align:center; width: 30%;">
+
+					<p:column headerText="Fornecedor" style="text-align:left;">
+						<h:outputText value="#{fornecedor.nome}" />
+					</p:column>
+
+					<p:column headerText="Ações" style="width: 125px;">
+						<h:panelGrid columns="2" style="float:right;padding-top: 5px;">
+							<p:commandButton icon="ui-icon-pencil" update=":formFornecedor">
+								<f:setPropertyActionListener value="#{fornecedor}"
+									target="#{fornecedorBean.fornecedor}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-trash"
+								action="#{fornecedorBean.remover(fornecedor)}" ajax="false"
+								update="formTabelaFornecedores:tabelaFornecedores" />
+						</h:panelGrid>
+					</p:column>
+
+				</p:dataTable>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

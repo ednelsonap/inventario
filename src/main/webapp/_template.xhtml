@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['img/spdm_favicon.ico']}" />
+
+	<ui:insert name="titulo">
+	</ui:insert>
+
+	<link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['img/ps_favicon.ico']}" />
+
+	<link rel="stylesheet" type="text/css"
+		href="#{resource['css/normalize.css']}" />
+
+</h:head>
+
+<h:body style="background-color: LightCyan;">
+	<script>
+		PrimeFaces.locales['pt'] = {
+			closeText : 'Fechar',
+			prevText : 'Anterior',
+			nextText : 'Próximo',
+			currentText : 'Começo',
+			monthNames : [ 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
+					'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro',
+					'Novembro', 'Dezembro' ],
+			monthNamesShort : [ 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
+					'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez' ],
+			dayNames : [ 'Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta',
+					'Sexta', 'Sábado' ],
+			dayNamesShort : [ 'Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb' ],
+			dayNamesMin : [ 'D', 'S', 'T', 'Q', 'Q', 'S', 'S' ],
+			weekHeader : 'Semana',
+			firstDay : 0,
+			isRTL : false,
+			showMonthAfterYear : false,
+			yearSuffix : '',
+			timeOnlyTitle : 'Só Horas',
+			timeText : 'Tempo',
+			hourText : 'Hora',
+			minuteText : 'Minuto',
+			secondText : 'Segundo',
+			ampm : false,
+			month : 'Mês',
+			week : 'Semana',
+			day : 'Dia',
+			allDayText : 'Todo o Dia'
+		};
+	</script>
+
+	<div id="cabecalho" style="background-color: CadetBlue;">
+		<p:growl id="messages" autoUpdate="true" life="3000" />
+
+		<h:form rendered="#{usuarioLogado != null}">
+			<h:panelGrid columns="2" style="font-size: 12px; position:absolute; top:0; right:0;" >
+				
+				<p:menuButton value="#{usuarioLogado.login}">
+					<p:menuitem value="Alterar Senha" action="usuario?faces-redirect=true" icon="fa fa-fw fa-lock" />
+					<p:menuitem value="Sair" action="#{loginBean.deslogar}" icon="fa fa-fw fa-sign-out" />
+				</p:menuButton>
+			
+			</h:panelGrid>
+		</h:form>
+
+		<div align="center">
+			<h:panelGrid columns="2">
+
+				<h:graphicImage library="img" name="logo.png" style="margin-top:5px; margin-botton:5px;"/>
+
+				<h1 style="text-align: center; font-family: verdana; font-weight:bold; color:Black; font-size: 24px; margin-top:5px; margin-botton:5px; padding:0;">
+					SISTEMA DE CONTROLE DE EQUIPAMENTOS DE TI
+				</h1>
+				
+			</h:panelGrid>
+		</div>
+
+	</div>
+
+	<div id="conteudo"
+		style="font-size: 12px;">
+
+			<h:form rendered="#{usuarioLogado != null}">
+			
+				<p:menuButton value="Menu" style="font-size: 18px">
+			
+					<p:menuitem value="Equipamentos" action="equipamento?faces-redirect=true"	
+						icon="fa fa-fw fa-laptop" />
+					
+					<p:menuitem value="Categorias" action="categoria?faces-redirect=true" 
+						icon="fa fa-fw fa-reorder" />
+					
+					<p:menuitem value="Unidades" action="unidade?faces-redirect=true"
+						icon="fa fa-fw fa-hospital-o" />
+						
+					<p:menuitem value="Departamentos" action="departamento?faces-redirect=true"
+						icon="fa fa-fw fa-institution" />			
+					
+					<p:menuitem value="Fornecedores" action="fornecedor?faces-redirect=true"
+						icon="fa fa-fw fa-shopping-cart"/>		
+					
+					<p:menuitem value="Usuarios" action="usuario?faces-redirect=true"
+						icon="fa fa-fw fa-user" />
+									
+					<p:menuitem value="Pesquisar" action="pesquisar?faces-redirect=true" 
+						icon="fa fa-fw fa-search" />
+	
+				</p:menuButton>
+			</h:form>
+
+
+		<h1>
+			<ui:insert name="titulo"></ui:insert>
+		</h1>
+
+		<ui:insert name="conteudo">
+		</ui:insert>
+	</div>
+</h:body>
+
+</html>

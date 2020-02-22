@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="equipamentoId"
+			value="#{equipamentoBean.equipamentoId}" />
+		<f:viewAction action="#{equipamentoBean.carregarEquipamentoPelaId}"
+			if="#{param.equipamentoId != null}" />
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<title>Equipamento</title>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<!-- <h:body style="background-image: linear-gradient(black, grey, white);"> -->
+
+		<!-- FORMULÁRIO DE CADASTRO DE EQUIPAMENTOS -->
+
+		<h:form id="formEquipamento">
+
+			<div align="center">
+				<p:fieldset legend="Dados do Equipamento"
+					style="margin-bottom:20px; width:50%;">
+
+					<h:panelGrid id="panelGridCadastro">
+						<h:panelGrid columns="4" style="margin-bottom:10px"
+							cellpadding="5">
+
+							<p:outputLabel value="Patrimonio:" for="codigoPatrimonio" />
+							<p:inputText id="codigoPatrimonio"
+								value="#{equipamentoBean.equipamento.codigoPatrimonio}"
+								required="true"
+								requiredMessage="Patrimônio é um campo obrigatório"
+								validatorMessage="O patrimônio não pode ser superior a 6 caracteres">
+								<f:validateLength maximum="6" />
+							</p:inputText>
+
+							<p:outputLabel value="Nome:" for="nome" />
+							<p:inputText id="nome"
+								value="#{equipamentoBean.equipamento.nome}" required="true"
+								requiredMessage="Nome é um campo obrigatório"
+								validatorMessage="Nome não pode ser superior a 20 caracteres">
+								<f:validateLength maximum="20" />
+							</p:inputText>
+
+							<p:outputLabel value="Categoria: " for="nome" />
+							<p:selectOneMenu value="#{equipamentoBean.equipamento.categoria}"
+								required="true"
+								requiredMessage="Categoria é um campo obrigatório">
+								<f:selectItem itemLabel="Selecione" itemValue="" />
+								<f:selectItems value="#{equipamentoBean.categorias}"
+									var="categoria" itemLabel="#{categoria.nome}"
+									itemValue="#{categoria}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Fornecedor: " for="nome" />
+							<p:selectOneMenu
+								value="#{equipamentoBean.equipamento.fornecedor}"
+								required="true"
+								requiredMessage="Fornecedor é um campo obrigatório">
+								<f:selectItem itemLabel="Selecione" itemValue="" />
+								<f:selectItems value="#{equipamentoBean.fornecedores}"
+									var="fornecedor" itemLabel="#{fornecedor.nome}"
+									itemValue="#{fornecedor}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Status: " for="nome" />
+							<p:selectOneMenu value="#{equipamentoBean.equipamento.status}"
+								required="true" requiredMessage="Status é um campo obrigatório">
+
+								<f:selectItem itemLabel="Selecione" itemValue="" />
+								<f:selectItem itemLabel="Ativo" itemValue="Ativo" />
+								<f:selectItem itemLabel="Estoque" itemValue="Estoque" />
+								<f:selectItem itemLabel="Manutenção" itemValue="Manutenção" />
+								<f:selectItem itemLabel="Baixa" itemValue="Baixa" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Departamento: " for="nome" />
+							<p:selectOneMenu id="selectDepartamento"
+								value="#{equipamentoBean.equipamento.departamento}"
+								required="true"
+								requiredMessage="Departamento é um campo obrigatório"
+								filter="true" filterMatchMode="contains">
+								<f:selectItem itemLabel="Selecione" itemValue="" />
+								<f:selectItems value="#{equipamentoBean.departamentos}"
+									var="departamento"
+									itemLabel="#{departamento.unidade.nome} - #{departamento.nome}"
+									itemValue="#{departamento}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Marca:" for="marca" />
+							<p:inputText id="marca"
+								value="#{equipamentoBean.equipamento.marca}"
+								validatorMessage="A Marca não pode ser superior a 20 caracteres">
+								<f:validateLength maximum="20" />
+							</p:inputText>
+
+							<p:outputLabel value="Modelo:" for="modelo" />
+							<p:inputText id="modelo"
+								value="#{equipamentoBean.equipamento.modelo}"
+								validatorMessage="O Modelo não pode ser superior a 20 caracteres">
+								<f:validateLength maximum="20" />
+							</p:inputText>
+
+							<p:outputLabel value="IP:" for="ip" />
+							<p:inputMask id="ip" value="#{equipamentoBean.equipamento.ip}"
+								mask="999.999.999.999"
+								validatorMessage="O IP não pode ser superior a 15 caracteres">
+								<f:validateLength maximum="15" />
+							</p:inputMask>
+							
+							<h:outputText />
+							<h:outputText />
+							
+						</h:panelGrid>
+						
+						<h:panelGrid>
+							<p:outputLabel value="Observação:" for="observacao" />
+							<p:inputTextarea id="observacao"
+								value="#{equipamentoBean.equipamento.observacao}" rows="5"
+								cols="75" counter="display" maxlength="500"
+								counterTemplate="{0} caracteres restantes.">
+							</p:inputTextarea>
+							<h:outputText id="display" />
+						</h:panelGrid>
+
+
+						<h:panelGrid columns="3">
+							<p:commandButton value="Salvar" icon="fa fa-fw fa-save"
+								action="#{equipamentoBean.salvar}" style="margin-right:20px;"
+								ajax="false" process="formEquipamento"
+								update="@form:tabelaEquipamentos"
+								rendered="#{equipamentoBean.exibirBotaoSalvar(equipamento)}" />
+
+							<p:commandButton value="Alterar" id="botaoAlterar"
+								icon="fa fa-fw fa-edit" action="#{equipamentoBean.alterar}"
+								style="margin-right:20px;" ajax="false"
+								process="formEquipamento" update="@form:tabelaEquipamentos"
+								rendered="#{equipamentoBean.exibirBotaoAlterar(equipamento)}" />
+
+							<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
+								action="#{equipamentoBean.limpar}" immediate="true" ajax="false"
+								style="margin-right:20px;">
+								<p:resetInput target="panelGridCadastro" />
+							</p:commandButton>
+						</h:panelGrid>
+
+					</h:panelGrid>
+				</p:fieldset>
+			</div>
+		</h:form>
+
+		<!-- TABELA DE EQUIPAMENTOS CADASTRADOS -->
+
+		<h:form id="formTabelaEquipamentos">
+
+			<p:dataTable id="tabelaEquipamentos" var="equipamento"
+				value="#{equipamentoBean.equipamentoDataModel}"
+				emptyMessage="Nenhum equipamento cadastrado" paginator="true"
+				lazy="true" reflow="true" rows="10"
+				style="margin-bottom:20px; text-align:center;">
+
+				<f:facet name="header">
+					Equipamentos
+				</f:facet>
+
+				<p:column headerText="Patrimônio">
+					<h:outputText value="#{equipamento.codigoPatrimonio}" />
+				</p:column>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{equipamento.nome}" />
+				</p:column>
+
+				<p:column headerText="Categoria">
+					<h:outputText value="#{equipamento.categoria.nome}" />
+				</p:column>
+
+				<p:column headerText="Fornecedor">
+					<h:outputText value="#{equipamento.fornecedor.nome}" />
+				</p:column>
+
+				<p:column headerText="Status">
+					<h:outputText value="#{equipamento.status}" />
+				</p:column>
+
+				<p:column headerText="Unidade">
+					<h:outputText value="#{equipamento.departamento.unidade.nome}" />
+				</p:column>
+
+				<p:column headerText="Departamento">
+					<h:outputText value="#{equipamento.departamento.nome}" />
+				</p:column>
+
+				<p:column headerText="Marca">
+					<h:outputText value="#{equipamento.marca}" />
+				</p:column>
+
+				<p:column headerText="Modelo">
+					<h:outputText value="#{equipamento.modelo}" />
+				</p:column>
+
+				<p:column headerText="IP">
+					<h:outputText value="#{equipamento.ip}" />
+				</p:column>
+
+				<p:column headerText="Ações" style="width: 150px;">
+					<h:panelGrid id="panelGridAcoes" columns="3"
+						style="float:right;padding-top: 5px;">
+
+						<p:commandButton
+							update=":formTabelaEquipamentos:equipamentoDetalhes"
+							oncomplete="PF('equipamentoDialog').show()" title="Visualizar"
+							icon="fa fa-fw fa-search">
+
+							<f:setPropertyActionListener value="#{equipamento}"
+								target="#{equipamentoBean.equipamento}" />
+						</p:commandButton>
+
+						<p:commandButton update=":formEquipamento" icon="fa fa-fw fa-edit"
+							title="Alterar" ajax="false"
+							render=":formEquipamento:botaoAlterar">
+							<f:setPropertyActionListener value="#{equipamento}"
+								target="#{equipamentoBean.equipamento}" />
+						</p:commandButton>
+
+						<p:commandButton icon="fa fa-fw fa-trash"
+							action="#{equipamentoBean.remover(equipamento)}" title="Excluir"
+							update="@form :formTabelaEquipamentos" ajax="false">
+						</p:commandButton>
+
+					</h:panelGrid>
+				</p:column>
+
+			</p:dataTable>
+			
+			<p:dialog header="Detalhes do Equipamento"
+				widgetVar="equipamentoDialog" modal="true" showEffect="fade"
+				hideEffect="fade" resizable="false" height="auto" width="auto" >
+				<div align="center">
+				<p:outputPanel id="equipamentoDetalhes" style="text-align:center; horizontal-align:center;" >
+					<p:panelGrid columns="2"
+						rendered="#{not empty equipamentoBean.equipamento}"
+						columnClasses="label,value" style="text-align:center; horizontal-align:center;" >
+						<f:facet name="header">
+
+						</f:facet>
+
+						<h:outputText value="Patrimônio:" />
+						<h:outputText
+							value="#{equipamentoBean.equipamento.codigoPatrimonio}" />
+
+						<h:outputText value="Nome" />
+						<h:outputText value="#{equipamentoBean.equipamento.nome}" />
+
+						<h:outputText value="Categoria" />
+						<h:outputText
+							value="#{equipamentoBean.equipamento.categoria.nome}" />
+
+						<h:outputText value="Status" />
+						<h:outputText value="#{equipamentoBean.equipamento.status}" />
+
+						<h:outputText value="Marca" />
+						<h:outputText value="#{equipamentoBean.equipamento.marca}" />
+
+						<h:outputText value="Modelo" />
+						<h:outputText value="#{equipamentoBean.equipamento.modelo}" />
+
+						<h:outputText value="IP" />
+						<h:outputText value="#{equipamentoBean.equipamento.ip}" />
+
+						<h:outputText value="Forcecedor" />
+						<h:outputText
+							value="#{equipamentoBean.equipamento.fornecedor.nome}" />
+
+						<h:outputText value="Unidade" />
+						<h:outputText
+							value="#{equipamentoBean.equipamento.departamento.unidade.nome}" />
+
+						<h:outputText value="Departamento" />
+						<h:outputText
+							value="#{equipamentoBean.equipamento.departamento.nome}" />
+
+						<h:outputText value="Data de cadastro" />
+						<h:outputText
+							value="#{equipamentoBean.equipamento.dataCadastro.time}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+
+						<h:outputText value="Observação" />
+						<h:outputText value="#{equipamentoBean.equipamento.observacao}" />
+					</p:panelGrid>
+				</p:outputPanel>
+				</div>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

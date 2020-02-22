@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+</h:head>
+<h:body>		
+<!-- FORMULÁRIO DE CADASTRO DE EQUIPAMENTOS -->
+		
+		<h:form id="formEquipamento">
+			<div align="center">
+				<p:fieldset legend="Dados do Equipamento" style="margin-bottom:20px; width: 45%; font-size: 12px;">
+					<h:panelGrid id="panelGridCadastro" columns="4" style="margin-bottom:10px" cellpadding="5">
+	
+						<p:outputLabel value="Patrimonio:" for="codigoPatrimonio" />
+						<p:inputText id="codigoPatrimonio"
+							value="#{equipamentoBean.equipamento.codigoPatrimonio}" >
+						</p:inputText>
+	
+						<p:outputLabel value="Nome:" for="nome" />
+						<p:inputText id="nome" value="#{equipamentoBean.equipamento.nome}"
+							required="true" requiredMessage="Nome é um campo obrigatório"
+							validatorMessage="Nome não pode ser superior a 50">
+							<f:validateLength maximum="50" />
+						</p:inputText>
+	
+						<p:outputLabel value="Categoria: " for="nome" />
+						<p:selectOneMenu value="#{equipamentoBean.equipamento.categoria}"
+							required="true" requiredMessage="Categoria é um campo obrigatório" >
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItems value="#{equipamentoBean.categorias}"
+								var="categoria" itemLabel="#{categoria.nome}"
+								itemValue="#{categoria}" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="Fornecedor: " for="nome" />
+						<p:selectOneMenu value="#{equipamentoBean.equipamento.fornecedor}"
+							required="true" requiredMessage="Fornecedor é um campo obrigatório" >
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItems value="#{equipamentoBean.fornecedores}"
+								var="fornecedor" itemLabel="#{fornecedor.nome}"
+								itemValue="#{fornecedor}" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="Status: " for="nome" />
+						<p:selectOneMenu value="#{equipamentoBean.equipamento.status}"
+							required="true" requiredMessage="Status é um campo obrigatório">
+	
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItem itemLabel="Ativo" itemValue="Ativo" />
+							<f:selectItem itemLabel="Estoque" itemValue="Estoque" />
+							<f:selectItem itemLabel="Manutenção" itemValue="Manutenção" />
+							<f:selectItem itemLabel="Baixa" itemValue="Baixa" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="Departamento: " for="nome" />
+						<p:selectOneMenu id="selectDepartamento" value="#{equipamentoBean.equipamento.departamento}"
+							required="true" requiredMessage="Departamento é um campo obrigatório" filter="true" filterMatchMode="contains">
+							<f:selectItem itemLabel="Selecione" itemValue="" />
+							<f:selectItems value="#{equipamentoBean.departamentos}"
+								var="departamento" itemLabel="#{departamento.unidade.nome} - #{departamento.nome}"
+								itemValue="#{departamento}" />
+						</p:selectOneMenu>
+						
+						<p:outputLabel value="Marca:" for="marca" />
+						<p:inputText id="marca"
+							value="#{equipamentoBean.equipamento.marca}" />
+	
+						<p:outputLabel value="Modelo:" for="modelo" />
+						<p:inputText id="modelo"
+							value="#{equipamentoBean.equipamento.modelo}" />
+	
+						<p:outputLabel value="IP:" for="ip" />
+						<p:inputMask id="ip" value="#{equipamentoBean.equipamento.ip}"
+							mask="999.999.999.999" />
+	
+						<p:outputLabel value="Observação:" for="observacao" />
+						<p:inputTextarea id="observacao"
+							value="#{equipamentoBean.equipamento.observacao}" />
+	
+						<p:commandButton value="Salvar" action="#{equipamentoBean.salvar}"
+							style="margin-right:20px;" ajax="false" process="formEquipamento"
+							update="equipamento2.xhtml" />
+							
+						<p:commandButton value="Limpar" action="#{equipamentoBean.limpar}" immediate="true" ajax="false" style="margin-right:20px;">
+	                		<p:resetInput target="panelGridCadastro" />
+	            		</p:commandButton>	
+	
+					</h:panelGrid>
+				</p:fieldset>
+			</div>
+		</h:form>
+	</h:body>
+</html>
