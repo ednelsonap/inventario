@@ -1,18 +1,24 @@
 package br.com.spdm.inventario.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
 import org.primefaces.PrimeFaces;
 
-import br.com.spdm.inventario.dao.DAO;
+import br.com.spdm.inventario.dao.CategoriaDao;
+import br.com.spdm.inventario.dao.DepartamentoDao;
 import br.com.spdm.inventario.dao.EquipamentoDao;
+import br.com.spdm.inventario.dao.FornecedorDao;
+import br.com.spdm.inventario.dao.UnidadeDao;
 import br.com.spdm.inventario.model.Categoria;
 import br.com.spdm.inventario.model.Departamento;
 import br.com.spdm.inventario.model.Equipamento;
@@ -23,8 +29,9 @@ import br.com.spdm.inventario.model.Usuario;
 
 @Named
 @ViewScoped
-public class EquipamentoBean {
+public class EquipamentoBean implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private Equipamento equipamento = new Equipamento();
 	private Unidade unidade = new Unidade();
 	private Usuario usuario = new Usuario();
@@ -33,7 +40,20 @@ public class EquipamentoBean {
 	private Integer equipamentoId;
 	ArrayList<Integer> a = new ArrayList<Integer>();
 	
-
+	@Inject
+	private EquipamentoDao equipamentoDao;
+	@Inject
+	private CategoriaDao categoriaDao;
+	@Inject
+	private FornecedorDao fornecedorDao;
+	@Inject
+	private DepartamentoDao departamentoDao;
+	@Inject
+	private UnidadeDao unidadeDao;
+	
+	@Inject
+	FacesContext context;
+	
 	public Equipamento getEquipamento() {
 		return equipamento;
 	}
@@ -67,19 +87,19 @@ public class EquipamentoBean {
 	}
 
 	public List<Categoria> getCategorias() {
-		return new DAO<Categoria>(Categoria.class).listaTodos();
+		return categoriaDao.listaTodos();
 	}
 
 	public List<Unidade> getUnidades() {
-		return new DAO<Unidade>(Unidade.class).listaTodos();
+		return unidadeDao.listaTodos();
 	}
 
 	public List<Departamento> getDepartamentos() {
-		return new DAO<Departamento>(Departamento.class).listaTodos();
+		return departamentoDao.listaTodos();
 	}
 
 	public List<Fornecedor> getFornecedores() {
-		return new DAO<Fornecedor>(Fornecedor.class).listaTodos();
+		return fornecedorDao.listaTodos();
 	}
 
 	public List<Departamento> getDepartamentosDaUnidade() {
@@ -95,6 +115,7 @@ public class EquipamentoBean {
 	 * opcoes, null); }
 	 */
 
+	@Transactional
 	public void salvar() {
 		System.out.println("Gravando equipamento " + this.equipamento.getNome());
 
@@ -110,7 +131,7 @@ public class EquipamentoBean {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"Já existe um equipamento com este mesmo nome!", null));
 		} else {
-			new DAO<Equipamento>(Equipamento.class).adiciona(this.equipamento);
+			equipamentoDao.adiciona(this.equipamento);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
 		}
@@ -130,11 +151,12 @@ public class EquipamentoBean {
 		this.equipamento = new Equipamento();
 	}
 
+	@Transactional
 	public void alterar() {
 		System.out.println("Alterando equipamento " + this.equipamento.getNome());
 
 		try {
-			new DAO<Equipamento>(Equipamento.class).atualiza(this.equipamento);
+			equipamentoDao.atualiza(this.equipamento);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
 
@@ -178,15 +200,16 @@ public class EquipamentoBean {
 		PrimeFaces.current().resetInputs("formPesquisa:panelGridPesquisa");
 	}
 	
+	@Transactional
 	public void remover(Equipamento equipamento) {
 		System.out.println("Removendo Equipamento " + equipamento.getNome());
-		new DAO<Equipamento>(Equipamento.class).remove(equipamento);
+		equipamentoDao.remove(equipamento);
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage("Equipamento " + equipamento.getNome() + " removido!"));
 	}
 
 	public void carregarEquipamentoPelaId() {
-		this.equipamento = new DAO<Equipamento>(Equipamento.class).buscaPorId(this.equipamento.getId());
+		this.equipamento = equipamentoDao.buscaPorId(this.equipamento.getId());
 	}
 
 	/*
@@ -206,6 +229,14 @@ public class EquipamentoBean {
 
 	public void setEquipamentoDataModel(EquipamentoDataModel equipamentoDataModel) {
 		this.equipamentoDataModel = equipamentoDataModel;
+	}
+
+	public EquipamentoDao getEquipamentoDao() {
+		return equipamentoDao;
+	}
+
+	public void setEquipamentoDao(EquipamentoDao equipamentoDao) {
+		this.equipamentoDao = equipamentoDao;
 	}
 
 	/*

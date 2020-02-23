@@ -1,23 +1,27 @@
 package br.com.spdm.inventario.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
-import br.com.spdm.inventario.dao.DAO;
 import br.com.spdm.inventario.dao.DepartamentoDao;
+import br.com.spdm.inventario.dao.UnidadeDao;
 import br.com.spdm.inventario.model.Departamento;
 import br.com.spdm.inventario.model.DepartamentoDataModel;
 import br.com.spdm.inventario.model.Unidade;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class DepartamentoBean {
+public class DepartamentoBean implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private Departamento departamento = new Departamento();
 	private Integer unidadeId;
 
@@ -25,6 +29,13 @@ public class DepartamentoBean {
 
 	private DepartamentoDataModel departamentoDataModel = new DepartamentoDataModel();
 
+	@Inject
+	private DepartamentoDao departamentoDao;
+	@Inject
+	private UnidadeDao unidadeDao;
+	@Inject
+	FacesContext context;
+	
 	public Departamento getDepartamento() {
 		return departamento;
 	}
@@ -33,6 +44,7 @@ public class DepartamentoBean {
 		this.departamento = departamento;
 	}
 
+	@Transactional
 	public void salvar() {
 		System.out.println("Gravando departamento " + this.departamento.getNome());
 
@@ -51,30 +63,31 @@ public class DepartamentoBean {
 
 			// para inserção em que não haja duplicidade
 		} else if (this.departamento.getId() == null) {
-			new DAO<Departamento>(Departamento.class).adiciona(this.departamento);
+			departamentoDao.adiciona(this.departamento);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Departamento cadastrado! "));
 
 			// para alteração em que não haja duplicidade
 		} else {
-			new DAO<Departamento>(Departamento.class).atualiza(this.departamento);
+			departamentoDao.atualiza(this.departamento);
 		}
 
 		this.departamento = new Departamento();
 	}
 
 	public List<Departamento> getDepartamentos() {
-		return new DAO<Departamento>(Departamento.class).listaTodos();
+		return departamentoDao.listaTodos();
 	}
 
 	public List<Unidade> getUnidades() {
-		return new DAO<Unidade>(Unidade.class).listaTodos();
+		return unidadeDao.listaTodos();
 	}
 
+	@Transactional
 	public void remover(Departamento departamento) {
 		System.out.println("Removendo departamento " + departamento.getNome());
 		
 		try {
-			new DAO<Departamento>(Departamento.class).remove(departamento);
+			departamentoDao.remove(departamento);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Departamento " + departamento.getNome() + " removido!"));
 			

@@ -1,22 +1,33 @@
 package br.com.spdm.inventario.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
-import br.com.spdm.inventario.dao.DAO;
+import br.com.spdm.inventario.dao.CategoriaDao;
 import br.com.spdm.inventario.model.Categoria;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class CategoriaBean {
+public class CategoriaBean implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	private Categoria categoria = new Categoria();
 
+	@Inject
+	private CategoriaDao categoriaDao;
+	
+	@Inject
+	FacesContext context;
+	
 	public Categoria getCategoria() {
 		return categoria;
 	}
@@ -26,22 +37,23 @@ public class CategoriaBean {
 	}
 
 	public List<Categoria> getCategorias() {
-		return new DAO<Categoria>(Categoria.class).listaTodos();
+		return categoriaDao.listaTodos();
 	}
 
 	public String getCategoriaEscolhida() {
 		return categoria != null && categoria.getId() != null ? categoria.toString() : "Classe não escolhida";
 	}
 
+	@Transactional
 	public void salvar() {
 		System.out.println("Gravando categoria " + this.categoria.getNome());
 
 		if (this.categoria.getId() == null) {
-			new DAO<Categoria>(Categoria.class).adiciona(this.categoria);
+			categoriaDao.adiciona(this.categoria);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Categoria " + categoria.getNome() + " salva!"));
 		} else {
-			new DAO<Categoria>(Categoria.class).atualiza(this.categoria);
+			categoriaDao.atualiza(this.categoria);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Categoria " + categoria.getNome() + " alterada!"));
 		}
@@ -50,11 +62,12 @@ public class CategoriaBean {
 		// return "equipamento?faces-redirect=true";
 	}
 
+	@Transactional
 	public void remover(Categoria categoria) {
 		System.out.println("Removendo Categoria " + categoria.getNome());
 		
 		try {
-			new DAO<Categoria>(Categoria.class).remove(categoria);
+			categoriaDao.remove(categoria);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Categoria " + categoria.getNome() + " removida!"));
 		} catch (PersistenceException e) {

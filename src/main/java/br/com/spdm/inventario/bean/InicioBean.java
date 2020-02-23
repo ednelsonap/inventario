@@ -1,13 +1,17 @@
 package br.com.spdm.inventario.bean;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import java.io.Serializable;
+
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 
 import br.com.spdm.inventario.model.Equipamento;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class InicioBean {
+public class InicioBean implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	private Equipamento equipamento = new Equipamento();
 
 	public Equipamento getEquipamento() {

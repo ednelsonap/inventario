@@ -1,21 +1,31 @@
 package br.com.spdm.inventario.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.transaction.Transactional;
 
-import br.com.spdm.inventario.dao.DAO;
+import br.com.spdm.inventario.dao.UsuarioDao;
 import br.com.spdm.inventario.model.Usuario;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class UsuarioBean {
+public class UsuarioBean implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	private Usuario usuario = new Usuario();
 
+	@Inject
+	private UsuarioDao usuarioDao;
+	@Inject
+	FacesContext context;
+	
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -25,18 +35,19 @@ public class UsuarioBean {
 	}
 
 	public List<Usuario> getUsuarios(){
-		return new DAO<Usuario>(Usuario.class).listaTodos();
+		return usuarioDao.listaTodos();
 	}
 	
+	@Transactional
 	public void salvar() {
 		System.out.println("Gravando usuario " + this.usuario.getNome());
 
 		if(this.usuario.getId() == null) {
-			new DAO<Usuario>(Usuario.class).adiciona(this.usuario);
+			usuarioDao.adiciona(this.usuario);
 			FacesContext.getCurrentInstance().addMessage(null,
 	                new FacesMessage("Usuario " + usuario.getNome() + " salvo!"));
 		} else {
-			new DAO<Usuario>(Usuario.class).atualiza(this.usuario);
+			usuarioDao.atualiza(this.usuario);
 			FacesContext.getCurrentInstance().addMessage(null,
 	                new FacesMessage("Usuario " + usuario.getNome() + " alterado!"));
 		}
@@ -45,10 +56,11 @@ public class UsuarioBean {
 		//return "equipamento?faces-redirect=true";
 	}
 	
+	@Transactional
 	public void remover(Usuario usuario) {
 		System.out.println("Removendo Usuario " + usuario.getNome());
 		
-		new DAO<Usuario>(Usuario.class).remove(usuario);
+		usuarioDao.remove(usuario);
 		FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage("Usuario " + usuario.getNome() + " removido!"));
 	}

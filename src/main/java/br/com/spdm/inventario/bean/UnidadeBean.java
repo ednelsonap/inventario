@@ -1,25 +1,33 @@
 package br.com.spdm.inventario.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
-import br.com.spdm.inventario.dao.DAO;
 import br.com.spdm.inventario.dao.UnidadeDao;
 import br.com.spdm.inventario.model.Departamento;
 import br.com.spdm.inventario.model.Unidade;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class UnidadeBean {
+public class UnidadeBean implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private Unidade unidade = new Unidade();
 	private Departamento departamento = new Departamento();
-
+	
+	@Inject
+	private UnidadeDao unidadeDao;
+	@Inject
+	FacesContext context;
+	
 	public Unidade getUnidade() {
 		return unidade;
 	}
@@ -32,6 +40,7 @@ public class UnidadeBean {
 		return unidade != null && unidade.getId() != null ? unidade.toString() : "Classe não escolhida";
 	}
 
+	@Transactional
 	public void salvar() {
 		System.out.println("Gravando unidade " + this.unidade.getNome());
 
@@ -42,11 +51,11 @@ public class UnidadeBean {
 					"Já existe uma unidade com o nome " + this.unidade.getNome() + "!", null));
 
 		} else if (this.unidade.getId() == null) {
-			new DAO<Unidade>(Unidade.class).adiciona(this.unidade);
+			unidadeDao.adiciona(this.unidade);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Unidade cadastrada!"));
 
 		} else {
-			new DAO<Unidade>(Unidade.class).atualiza(this.unidade);
+			unidadeDao.atualiza(this.unidade);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Unidade alterada!"));
 		}
 
@@ -54,17 +63,18 @@ public class UnidadeBean {
 	}
 
 	public List<Unidade> getUnidades() {
-		return new DAO<Unidade>(Unidade.class).listaTodos();
+		return unidadeDao.listaTodos();
 	}
 
 	public List<Departamento> getDepartamentosDaUnidade() {
 		return this.unidade.getDepartamentos();
 	}
 
+	@Transactional
 	public void remover(Unidade unidade) {
 		System.out.println("Removendo Unidade " + unidade.getNome());
 		try {
-			new DAO<Unidade>(Unidade.class).remove(unidade);
+			unidadeDao.remove(unidade);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Unidade " + unidade.getNome() + " removida!"));
 		} catch (PersistenceException e) {

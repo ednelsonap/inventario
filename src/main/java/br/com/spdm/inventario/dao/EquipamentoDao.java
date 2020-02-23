@@ -1,8 +1,11 @@
 package br.com.spdm.inventario.dao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -18,8 +21,53 @@ import br.com.spdm.inventario.model.Equipamento;
 import br.com.spdm.inventario.model.Fornecedor;
 import br.com.spdm.inventario.model.Unidade;
 
-public class EquipamentoDao {
+public class EquipamentoDao implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+
+	@Inject
+	EntityManager em;
+	
+	private DAO<Equipamento> dao;
+	
+	@PostConstruct
+	void init(){
+		this.dao = new DAO<Equipamento> (this.em, Equipamento.class);
+	}
+	//Métodos delegados do DAO
+	public void adiciona(Equipamento equipamento) {
+		dao.adiciona(equipamento);
+	}
+
+	public void remove(Equipamento equipamento) {
+		dao.remove(equipamento);
+	}
+
+	public void atualiza(Equipamento equipamento) {
+		dao.atualiza(equipamento);
+	}
+
+	public List<Equipamento> listaTodos() {
+		return dao.listaTodos();
+	}
+
+	public int contaTodos() {
+		return dao.contaTodos();
+	}
+
+	public Equipamento buscaPorId(Integer id) {
+		return dao.buscaPorId(id);
+	}
+	
+	public List<Equipamento> listaTodosPaginada(int firstResult, int maxResults, String coluna, String valor) {
+		return dao.listaTodosPaginada(firstResult, maxResults, coluna, valor);
+	}
+	
+	public int quantidadeDeElementos() {
+		return dao.quantidadeDeElementos();
+	}
+	
+	
 	public boolean patrimonioExistente(Equipamento equipamento) {
 
 		EntityManager em = new JPAUtil().getEntityManager();

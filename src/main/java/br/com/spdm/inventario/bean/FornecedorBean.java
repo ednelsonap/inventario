@@ -1,23 +1,32 @@
 package br.com.spdm.inventario.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 
-import br.com.spdm.inventario.dao.DAO;
 import br.com.spdm.inventario.dao.FornecedorDao;
 import br.com.spdm.inventario.model.Fornecedor;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class FornecedorBean {
+public class FornecedorBean implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	private Fornecedor fornecedor = new Fornecedor();
 
+	@Inject
+	private FornecedorDao fornecedorDao;
+	@Inject
+	FacesContext context;
+	
 	public Fornecedor getFornecedor() {
 		return fornecedor;
 	}
@@ -27,13 +36,14 @@ public class FornecedorBean {
 	}
 
 	public List<Fornecedor> getFornecedores() {
-		return new DAO<Fornecedor>(Fornecedor.class).listaTodos();
+		return fornecedorDao.listaTodos();
 	}
 
 	public String getFornecedorEscolhido() {
 		return fornecedor != null && fornecedor.getId() != null ? fornecedor.toString() : "Classe não escolhida";
 	}
 
+	@Transactional
 	public void salvar() {
 		System.out.println("Gravando fornecedor " + this.fornecedor.getNome());
 
@@ -44,11 +54,11 @@ public class FornecedorBean {
 					"Já existe um Fornecedor com o nome " + this.fornecedor.getNome() + "!", null));
 
 		} else if (this.fornecedor.getId() == null) {
-			new DAO<Fornecedor>(Fornecedor.class).adiciona(this.fornecedor);
+			fornecedorDao.adiciona(this.fornecedor);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Fornecedor " + "'" + fornecedor.getNome() + "'" + " cadastrado!"));
 		} else {
-			new DAO<Fornecedor>(Fornecedor.class).atualiza(this.fornecedor);
+			fornecedorDao.atualiza(this.fornecedor);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Fornecedor " + fornecedor.getNome() + " alterado!"));
 		}
@@ -57,11 +67,12 @@ public class FornecedorBean {
 		// return "equipamento?faces-redirect=true";
 	}
 
+	@Transactional
 	public void remover(Fornecedor fornecedor) {
 		System.out.println("Removendo Fornecedor " + fornecedor.getNome());
 		
 		try {
-			new DAO<Fornecedor>(Fornecedor.class).remove(fornecedor);
+			fornecedorDao.remove(fornecedor);
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Fornecedor " + fornecedor.getNome() + " removido!"));
 			

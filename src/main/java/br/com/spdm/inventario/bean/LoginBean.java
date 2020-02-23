@@ -1,23 +1,30 @@
 package br.com.spdm.inventario.bean;
 
 
+import java.io.Serializable;
+
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import br.com.spdm.inventario.dao.UsuarioDao;
 import br.com.spdm.inventario.model.Usuario;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class LoginBean {
+public class LoginBean implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private Usuario usuario = new Usuario();
 
 	public Usuario getUsuario() {
 		return usuario;
 	}
+	
+	@Inject
+	FacesContext context;
 	
 	public String entrar() {
 		System.out.println("fazendo login do usuario " + this.usuario.getLogin());

@@ -1,20 +1,19 @@
 package br.com.spdm.inventario.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 
-import org.primefaces.PrimeFaces;
-
-import br.com.spdm.inventario.dao.EquipamentoDao;
 import br.com.spdm.inventario.model.Equipamento;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class PesquisaBean {
+public class PesquisaBean implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private Equipamento equipamento = new Equipamento();
 	private List<Equipamento> equipamentosEncontrados = new ArrayList<>();
 

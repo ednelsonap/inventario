@@ -5,14 +5,15 @@
 	version="2.0">
 
 	<persistence-unit name="inventario" transaction-type="RESOURCE_LOCAL">
-
-   		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		
-		<class>br.com.techboard.inventario.model.Equipamento</class>
-		<class>br.com.techboard.inventario.model.Categoria</class>
-		<class>br.com.techboard.inventario.model.Unidade</class>
-		<class>br.com.techboard.inventario.model.Departamento</class>
-		<class>br.com.techboard.inventario.model.Fornecedor</class>
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+		<class>br.com.spdm.inventario.model.Equipamento</class>
+		<class>br.com.spdm.inventario.model.Categoria</class>
+		<class>br.com.spdm.inventario.model.Fornecedor</class>
+		<class>br.com.spdm.inventario.model.Unidade</class>
+		<class>br.com.spdm.inventario.model.Departamento</class>
+		<class>br.com.spdm.inventario.model.Usuario</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
