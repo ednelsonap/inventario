@@ -36,6 +36,7 @@ public class EquipamentoBean implements Serializable{
 	//private Integer categoriaId;
 	//private Integer equipamentoId;
 	ArrayList<Integer> a = new ArrayList<Integer>();
+	private List<Equipamento> equipamentos;
 	
 	@Inject
 	private EquipamentoDao equipamentoDao;
@@ -49,7 +50,7 @@ public class EquipamentoBean implements Serializable{
 	private UnidadeDao unidadeDao;
 	
 	@Inject
-	FacesContext context;
+	private FacesContext context;
 	
 	public Equipamento getEquipamento() {
 		return equipamento;
@@ -60,7 +61,10 @@ public class EquipamentoBean implements Serializable{
 	}
 
 	public List<Equipamento> getEquipamentos(){
-		return equipamentoDao.listaTodos();
+		if (this.equipamentos == null) {
+			this.equipamentos = this.equipamentoDao.listaTodos();
+		}
+		return equipamentos;
 	}
 	
 	public List<Categoria> getCategorias() {
@@ -121,11 +125,11 @@ public class EquipamentoBean implements Serializable{
 
 		try {
 			equipamentoDao.atualiza(this.equipamento);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
 
 		} catch (PersistenceException e) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN,
 							"Não foi possível salvar este equipamento! Verifique se não há duplicidade de nome ou patrimônio.",
 							null));
@@ -168,7 +172,7 @@ public class EquipamentoBean implements Serializable{
 	public void remover(Equipamento equipamento) {
 		System.out.println("Removendo Equipamento " + equipamento.getNome());
 		equipamentoDao.remove(equipamento);
-		FacesContext.getCurrentInstance().addMessage(null,
+		context.addMessage(null,
 				new FacesMessage("Equipamento " + equipamento.getNome() + " removido!"));
 	}
 
