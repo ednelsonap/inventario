@@ -24,7 +24,6 @@ import br.com.spdm.inventario.model.Departamento;
 import br.com.spdm.inventario.model.Equipamento;
 import br.com.spdm.inventario.model.Fornecedor;
 import br.com.spdm.inventario.model.Unidade;
-import br.com.spdm.inventario.model.Usuario;
 
 @Named
 @ViewScoped
@@ -34,9 +33,8 @@ public class EquipamentoBean implements Serializable{
 	
 	private Equipamento equipamento = new Equipamento();
 	private Unidade unidade = new Unidade();
-	private Usuario usuario = new Usuario();
-	private Integer categoriaId;
-	private Integer equipamentoId;
+	//private Integer categoriaId;
+	//private Integer equipamentoId;
 	ArrayList<Integer> a = new ArrayList<Integer>();
 	
 	@Inject
@@ -57,32 +55,8 @@ public class EquipamentoBean implements Serializable{
 		return equipamento;
 	}
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public Integer getEquipamentoId() {
-		return equipamentoId;
-	}
-
-	public void setEquipamentoId(Integer equipamentoId) {
-		this.equipamentoId = equipamentoId;
-	}
-
 	public void setEquipamento(Equipamento equipamento) {
 		this.equipamento = equipamento;
-	}
-
-	public Integer getCategoriaId() {
-		return categoriaId;
-	}
-
-	public void setCategoriaId(Integer categoriaId) {
-		this.categoriaId = categoriaId;
 	}
 
 	public List<Equipamento> getEquipamentos(){
@@ -92,7 +66,7 @@ public class EquipamentoBean implements Serializable{
 	public List<Categoria> getCategorias() {
 		return categoriaDao.listaTodos();
 	}
-
+	
 	public List<Unidade> getUnidades() {
 		return unidadeDao.listaTodos();
 	}
@@ -138,19 +112,6 @@ public class EquipamentoBean implements Serializable{
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
 		}
-
-		/*
-		 * try { new
-		 * DAO<Equipamento>(Equipamento.class).adiciona(this.equipamento);
-		 * FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-		 * "Equipamento " + equipamento.getNome() + " alterado!"));
-		 * 
-		 * } catch (PersistenceException e) {
-		 * FacesContext.getCurrentInstance().addMessage(null, new
-		 * FacesMessage(FacesMessage.SEVERITY_WARN,
-		 * "Não foi possível salvar este equipamento! Verifique se não há duplicidade de nome ou patrimônio."
-		 * , null)); }
-		 */
 		this.equipamento = new Equipamento();
 	}
 
@@ -211,8 +172,8 @@ public class EquipamentoBean implements Serializable{
 				new FacesMessage("Equipamento " + equipamento.getNome() + " removido!"));
 	}
 
-	public void carregarEquipamentoPelaId() {
+/*	public void carregarEquipamentoPelaId() {
 		this.equipamento = equipamentoDao.buscaPorId(this.equipamento.getId());
-	}
+	}*/
 	
 }
