@@ -22,7 +22,6 @@ import br.com.spdm.inventario.dao.UnidadeDao;
 import br.com.spdm.inventario.model.Categoria;
 import br.com.spdm.inventario.model.Departamento;
 import br.com.spdm.inventario.model.Equipamento;
-import br.com.spdm.inventario.model.EquipamentoDataModel;
 import br.com.spdm.inventario.model.Fornecedor;
 import br.com.spdm.inventario.model.Unidade;
 import br.com.spdm.inventario.model.Usuario;
@@ -32,10 +31,10 @@ import br.com.spdm.inventario.model.Usuario;
 public class EquipamentoBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
 	private Equipamento equipamento = new Equipamento();
 	private Unidade unidade = new Unidade();
 	private Usuario usuario = new Usuario();
-	private EquipamentoDataModel equipamentoDataModel = new EquipamentoDataModel();
 	private Integer categoriaId;
 	private Integer equipamentoId;
 	ArrayList<Integer> a = new ArrayList<Integer>();
@@ -86,6 +85,10 @@ public class EquipamentoBean implements Serializable{
 		this.categoriaId = categoriaId;
 	}
 
+	public List<Equipamento> getEquipamentos(){
+		return equipamentoDao.listaTodos();
+	}
+	
 	public List<Categoria> getCategorias() {
 		return categoriaDao.listaTodos();
 	}
@@ -211,39 +214,5 @@ public class EquipamentoBean implements Serializable{
 	public void carregarEquipamentoPelaId() {
 		this.equipamento = equipamentoDao.buscaPorId(this.equipamento.getId());
 	}
-
-	/*
-	 * public int quantidadeDeEquipamentos(){ return new
-	 * DAO<Equipamento>(Equipamento.class).contaTodos(); }
-	 */
-	/*
-	 * public Categoria getCategoria() { return categoria; }
-	 * 
-	 * public void setCategoria(Categoria categoria) { this.categoria =
-	 * categoria; }
-	 */
-
-	public EquipamentoDataModel getEquipamentoDataModel() {
-		return equipamentoDataModel;
-	}
-
-	public void setEquipamentoDataModel(EquipamentoDataModel equipamentoDataModel) {
-		this.equipamentoDataModel = equipamentoDataModel;
-	}
-
-	public EquipamentoDao getEquipamentoDao() {
-		return equipamentoDao;
-	}
-
-	public void setEquipamentoDao(EquipamentoDao equipamentoDao) {
-		this.equipamentoDao = equipamentoDao;
-	}
-
-	/*
-	 * public Unidade getUnidadeSelecionada() { return unidadeSelecionada; }
-	 * 
-	 * public void setUnidadeSelecionada(Unidade unidadeSelecionada) {
-	 * this.unidadeSelecionada = unidadeSelecionada; }
-	 */
-
+	
 }
