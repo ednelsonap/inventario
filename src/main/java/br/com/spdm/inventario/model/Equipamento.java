@@ -13,11 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.envers.Audited;
 
 @Entity
-@Audited
-//@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Equipamento implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -37,24 +34,28 @@ public class Equipamento implements Serializable {
 	private String marca;
 	@Column(length=20)
 	private String modelo;
-	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
-	private Fornecedor fornecedor;
 	@Column(length=15)
 	private String ip;
 	@Column(length=500)
 	private String observacao;
 	
 	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
-	//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+	private Fornecedor fornecedor;
+	
+	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
 	private Categoria categoria;
 	
 	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
 	private Departamento departamento;
 	
-	//@ManyToOne
-	//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	//private List<Localizacao> localizacoes = new ArrayList<>();
 	
+	public Fornecedor getFornecedor() {
+		return fornecedor;
+	}
+
+	public void setFornecedor(Fornecedor fornecedor) {
+		this.fornecedor = fornecedor;
+	}
 	
 	public Departamento getDepartamento() {
 		return departamento;
@@ -140,14 +141,6 @@ public class Equipamento implements Serializable {
 		this.observacao = observacao;
 	}
 
-	/*public List<Localizacao> getLocalizacoes() {
-		return localizacoes;
-	}
-
-	public void setLocalizacoes(List<Localizacao> localizacoes) {
-		this.localizacoes = localizacoes;
-	}*/
-	
 	@Override
 	public int hashCode() {
 		// TODO Auto-generated method stub
@@ -157,14 +150,6 @@ public class Equipamento implements Serializable {
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
 		return super.equals(obj);
-	}
-
-	public Fornecedor getFornecedor() {
-		return fornecedor;
-	}
-
-	public void setFornecedor(Fornecedor fornecedor) {
-		this.fornecedor = fornecedor;
 	}
 	
 }

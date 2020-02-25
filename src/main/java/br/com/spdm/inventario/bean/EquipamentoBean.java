@@ -22,23 +22,21 @@ import br.com.spdm.inventario.dao.UnidadeDao;
 import br.com.spdm.inventario.model.Categoria;
 import br.com.spdm.inventario.model.Departamento;
 import br.com.spdm.inventario.model.Equipamento;
-import br.com.spdm.inventario.model.EquipamentoDataModel;
 import br.com.spdm.inventario.model.Fornecedor;
 import br.com.spdm.inventario.model.Unidade;
-import br.com.spdm.inventario.model.Usuario;
 
 @Named
 @ViewScoped
 public class EquipamentoBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
 	private Equipamento equipamento = new Equipamento();
 	private Unidade unidade = new Unidade();
-	private Usuario usuario = new Usuario();
-	private EquipamentoDataModel equipamentoDataModel = new EquipamentoDataModel();
-	private Integer categoriaId;
-	private Integer equipamentoId;
+	//private Integer categoriaId;
+	//private Integer equipamentoId;
 	ArrayList<Integer> a = new ArrayList<Integer>();
+	private List<Equipamento> equipamentos;
 	
 	@Inject
 	private EquipamentoDao equipamentoDao;
@@ -52,44 +50,27 @@ public class EquipamentoBean implements Serializable{
 	private UnidadeDao unidadeDao;
 	
 	@Inject
-	FacesContext context;
+	private FacesContext context;
 	
 	public Equipamento getEquipamento() {
 		return equipamento;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
-	public Integer getEquipamentoId() {
-		return equipamentoId;
-	}
-
-	public void setEquipamentoId(Integer equipamentoId) {
-		this.equipamentoId = equipamentoId;
 	}
 
 	public void setEquipamento(Equipamento equipamento) {
 		this.equipamento = equipamento;
 	}
 
-	public Integer getCategoriaId() {
-		return categoriaId;
+	public List<Equipamento> getEquipamentos(){
+		if (this.equipamentos == null) {
+			this.equipamentos = this.equipamentoDao.listaTodos();
+		}
+		return equipamentos;
 	}
-
-	public void setCategoriaId(Integer categoriaId) {
-		this.categoriaId = categoriaId;
-	}
-
+	
 	public List<Categoria> getCategorias() {
 		return categoriaDao.listaTodos();
 	}
-
+	
 	public List<Unidade> getUnidades() {
 		return unidadeDao.listaTodos();
 	}
@@ -135,19 +116,6 @@ public class EquipamentoBean implements Serializable{
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
 		}
-
-		/*
-		 * try { new
-		 * DAO<Equipamento>(Equipamento.class).adiciona(this.equipamento);
-		 * FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-		 * "Equipamento " + equipamento.getNome() + " alterado!"));
-		 * 
-		 * } catch (PersistenceException e) {
-		 * FacesContext.getCurrentInstance().addMessage(null, new
-		 * FacesMessage(FacesMessage.SEVERITY_WARN,
-		 * "Não foi possível salvar este equipamento! Verifique se não há duplicidade de nome ou patrimônio."
-		 * , null)); }
-		 */
 		this.equipamento = new Equipamento();
 	}
 
@@ -157,11 +125,11 @@ public class EquipamentoBean implements Serializable{
 
 		try {
 			equipamentoDao.atualiza(this.equipamento);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
 
 		} catch (PersistenceException e) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN,
 							"Não foi possível salvar este equipamento! Verifique se não há duplicidade de nome ou patrimônio.",
 							null));
@@ -204,46 +172,12 @@ public class EquipamentoBean implements Serializable{
 	public void remover(Equipamento equipamento) {
 		System.out.println("Removendo Equipamento " + equipamento.getNome());
 		equipamentoDao.remove(equipamento);
-		FacesContext.getCurrentInstance().addMessage(null,
+		context.addMessage(null,
 				new FacesMessage("Equipamento " + equipamento.getNome() + " removido!"));
 	}
 
-	public void carregarEquipamentoPelaId() {
+/*	public void carregarEquipamentoPelaId() {
 		this.equipamento = equipamentoDao.buscaPorId(this.equipamento.getId());
-	}
-
-	/*
-	 * public int quantidadeDeEquipamentos(){ return new
-	 * DAO<Equipamento>(Equipamento.class).contaTodos(); }
-	 */
-	/*
-	 * public Categoria getCategoria() { return categoria; }
-	 * 
-	 * public void setCategoria(Categoria categoria) { this.categoria =
-	 * categoria; }
-	 */
-
-	public EquipamentoDataModel getEquipamentoDataModel() {
-		return equipamentoDataModel;
-	}
-
-	public void setEquipamentoDataModel(EquipamentoDataModel equipamentoDataModel) {
-		this.equipamentoDataModel = equipamentoDataModel;
-	}
-
-	public EquipamentoDao getEquipamentoDao() {
-		return equipamentoDao;
-	}
-
-	public void setEquipamentoDao(EquipamentoDao equipamentoDao) {
-		this.equipamentoDao = equipamentoDao;
-	}
-
-	/*
-	 * public Unidade getUnidadeSelecionada() { return unidadeSelecionada; }
-	 * 
-	 * public void setUnidadeSelecionada(Unidade unidadeSelecionada) {
-	 * this.unidadeSelecionada = unidadeSelecionada; }
-	 */
-
+	}*/
+	
 }

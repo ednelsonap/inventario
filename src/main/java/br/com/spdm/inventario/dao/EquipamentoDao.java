@@ -26,7 +26,7 @@ public class EquipamentoDao implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	EntityManager em;
+	private EntityManager em;
 	
 	private DAO<Equipamento> dao;
 	
@@ -36,35 +36,35 @@ public class EquipamentoDao implements Serializable{
 	}
 	//Métodos delegados do DAO
 	public void adiciona(Equipamento equipamento) {
-		dao.adiciona(equipamento);
+		this.dao.adiciona(equipamento);
 	}
 
 	public void remove(Equipamento equipamento) {
-		dao.remove(equipamento);
+		this.dao.remove(equipamento);
 	}
 
 	public void atualiza(Equipamento equipamento) {
-		dao.atualiza(equipamento);
+		this.dao.atualiza(equipamento);
 	}
 
 	public List<Equipamento> listaTodos() {
-		return dao.listaTodos();
+		return this.dao.listaTodos();
 	}
 
 	public int contaTodos() {
-		return dao.contaTodos();
+		return this.dao.contaTodos();
 	}
 
 	public Equipamento buscaPorId(Integer id) {
-		return dao.buscaPorId(id);
+		return this.dao.buscaPorId(id);
 	}
 	
 	public List<Equipamento> listaTodosPaginada(int firstResult, int maxResults, String coluna, String valor) {
-		return dao.listaTodosPaginada(firstResult, maxResults, coluna, valor);
+		return this.dao.listaTodosPaginada(firstResult, maxResults, coluna, valor);
 	}
 	
 	public int quantidadeDeElementos() {
-		return dao.quantidadeDeElementos();
+		return this.dao.quantidadeDeElementos();
 	}
 	
 	
