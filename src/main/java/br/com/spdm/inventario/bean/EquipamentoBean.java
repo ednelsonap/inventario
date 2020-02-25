@@ -105,15 +105,15 @@ public class EquipamentoBean implements Serializable{
 
 		// para inserção de patrimonio com duplicidade
 		if (patrimonioExistente && this.equipamento.getId() == null) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"Já existe um equipamento com este mesmo patrimônio!", null));
 			// para inserção de nome com duplicidade
 		} else if (nomeExistente && this.equipamento.getId() == null) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"Já existe um equipamento com este mesmo nome!", null));
 		} else {
 			equipamentoDao.adiciona(this.equipamento);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
 		}
 		this.equipamento = new Equipamento();

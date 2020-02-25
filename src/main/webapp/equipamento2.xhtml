@@ -8,27 +8,7 @@
 
 <ui:composition template="_template.xhtml">
 
-	<f:metadata>
-		<f:viewParam name="equipamentoId"
-			value="#{equipamentoBean.equipamentoId}" />
-		<f:viewAction action="#{equipamentoBean.carregarEquipamentoPelaId}"
-			if="#{param.equipamentoId != null}" />
-	</f:metadata>
-
-	<ui:define name="titulo">
-		<p:outputPanel
-			style="font-family:tahoma; text-align:center; margin-bottom: 0px; color:DarkSlateGray; font-size: 35px; font-weight:bold;">
-					EQUIPAMENTOS
-				</p:outputPanel>
-	</ui:define>
-	<!-- <h:head>
-			<title>Equipamentos</title>
-			<link rel="shortcut icon" type="image/x-icon" href="#{resource['img/ps_favicon.ico']}" />
-		</h:head> -->
-
 	<ui:define name="conteudo">
-
-		<!-- <h:body style="background-image: linear-gradient(black, grey, white);"> -->
 
 		<!-- FORMULÁRIO DE CADASTRO DE EQUIPAMENTOS -->
 

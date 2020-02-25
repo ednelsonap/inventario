@@ -24,7 +24,7 @@ public class UsuarioBean implements Serializable{
 	@Inject
 	private UsuarioDao usuarioDao;
 	@Inject
-	FacesContext context;
+	private FacesContext context;
 	
 	public Usuario getUsuario() {
 		return usuario;
@@ -44,11 +44,11 @@ public class UsuarioBean implements Serializable{
 
 		if(this.usuario.getId() == null) {
 			usuarioDao.adiciona(this.usuario);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 	                new FacesMessage("Usuario " + usuario.getNome() + " salvo!"));
 		} else {
 			usuarioDao.atualiza(this.usuario);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 	                new FacesMessage("Usuario " + usuario.getNome() + " alterado!"));
 		}
 
@@ -61,7 +61,7 @@ public class UsuarioBean implements Serializable{
 		System.out.println("Removendo Usuario " + usuario.getNome());
 		
 		usuarioDao.remove(usuario);
-		FacesContext.getCurrentInstance().addMessage(null,
+		context.addMessage(null,
 				new FacesMessage("Usuario " + usuario.getNome() + " removido!"));
 	}
 }

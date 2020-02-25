@@ -26,7 +26,7 @@ public class CategoriaBean implements Serializable{
 	private CategoriaDao categoriaDao;
 	
 	@Inject
-	FacesContext context;
+	private FacesContext context;
 	
 	public Categoria getCategoria() {
 		return categoria;
@@ -50,11 +50,11 @@ public class CategoriaBean implements Serializable{
 
 		if (this.categoria.getId() == null) {
 			categoriaDao.adiciona(this.categoria);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Categoria " + categoria.getNome() + " salva!"));
 		} else {
 			categoriaDao.atualiza(this.categoria);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Categoria " + categoria.getNome() + " alterada!"));
 		}
 
@@ -68,10 +68,10 @@ public class CategoriaBean implements Serializable{
 		
 		try {
 			categoriaDao.remove(categoria);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Categoria " + categoria.getNome() + " removida!"));
 		} catch (PersistenceException e) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover esta categoria!", null));
 		}
 	}

@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import br.com.spdm.inventario.dao.DepartamentoDao;
 import br.com.spdm.inventario.dao.UnidadeDao;
 import br.com.spdm.inventario.model.Departamento;
-import br.com.spdm.inventario.model.DepartamentoDataModel;
 import br.com.spdm.inventario.model.Unidade;
 
 @Named
@@ -22,19 +21,20 @@ import br.com.spdm.inventario.model.Unidade;
 public class DepartamentoBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
 	private Departamento departamento = new Departamento();
+	
 	private Integer unidadeId;
 
 	private Unidade unidade = new Unidade();
-
-	private DepartamentoDataModel departamentoDataModel = new DepartamentoDataModel();
 
 	@Inject
 	private DepartamentoDao departamentoDao;
 	@Inject
 	private UnidadeDao unidadeDao;
+	
 	@Inject
-	FacesContext context;
+	private FacesContext context;
 	
 	public Departamento getDepartamento() {
 		return departamento;
@@ -52,19 +52,19 @@ public class DepartamentoBean implements Serializable{
 
 		// para alteração com duplicidade de departamento
 		if (departamentoExistente && this.departamento.getId() != null) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Departamento já existente! ", null));
 
 			// para inserção com duplicidade de departamento
 		}
 		if (departamentoExistente && this.departamento.getId() == null) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Departamento já existente! ", null));
 
 			// para inserção em que não haja duplicidade
 		} else if (this.departamento.getId() == null) {
 			departamentoDao.adiciona(this.departamento);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Departamento cadastrado! "));
+			context.addMessage(null, new FacesMessage("Departamento cadastrado! "));
 
 			// para alteração em que não haja duplicidade
 		} else {
@@ -88,11 +88,11 @@ public class DepartamentoBean implements Serializable{
 		
 		try {
 			departamentoDao.remove(departamento);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Departamento " + departamento.getNome() + " removido!"));
 			
 		} catch (PersistenceException e) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este departamento!", null));
 		}
 	}
@@ -111,13 +111,5 @@ public class DepartamentoBean implements Serializable{
 
 	public void setUnidade(Unidade unidade) {
 		this.unidade = unidade;
-	}
-
-	public DepartamentoDataModel getDepartamentoDataModel() {
-		return departamentoDataModel;
-	}
-
-	public void setDepartamentoDataModel(DepartamentoDataModel departamentoDataModel) {
-		this.departamentoDataModel = departamentoDataModel;
 	}
 }

@@ -20,13 +20,14 @@ import br.com.spdm.inventario.model.Unidade;
 public class UnidadeBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
 	private Unidade unidade = new Unidade();
 	private Departamento departamento = new Departamento();
 	
 	@Inject
 	private UnidadeDao unidadeDao;
 	@Inject
-	FacesContext context;
+	private FacesContext context;
 	
 	public Unidade getUnidade() {
 		return unidade;
@@ -47,16 +48,16 @@ public class UnidadeBean implements Serializable{
 		boolean unidadeExistente = new UnidadeDao().unidadeExistente(this.unidade);
 
 		if (unidadeExistente) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"Já existe uma unidade com o nome " + this.unidade.getNome() + "!", null));
 
 		} else if (this.unidade.getId() == null) {
 			unidadeDao.adiciona(this.unidade);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Unidade cadastrada!"));
+			context.addMessage(null, new FacesMessage("Unidade cadastrada!"));
 
 		} else {
 			unidadeDao.atualiza(this.unidade);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Unidade alterada!"));
+			context.addMessage(null, new FacesMessage("Unidade alterada!"));
 		}
 
 		this.unidade = new Unidade();
@@ -75,10 +76,10 @@ public class UnidadeBean implements Serializable{
 		System.out.println("Removendo Unidade " + unidade.getNome());
 		try {
 			unidadeDao.remove(unidade);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Unidade " + unidade.getNome() + " removida!"));
 		} catch (PersistenceException e) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover esta unidade!", null));
 		}
 	}

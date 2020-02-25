@@ -25,7 +25,7 @@ public class FornecedorBean implements Serializable{
 	@Inject
 	private FornecedorDao fornecedorDao;
 	@Inject
-	FacesContext context;
+	private FacesContext context;
 	
 	public Fornecedor getFornecedor() {
 		return fornecedor;
@@ -50,16 +50,16 @@ public class FornecedorBean implements Serializable{
 		boolean fornecedorExistente = new FornecedorDao().fornecedorExistente(this.fornecedor);
 
 		if (fornecedorExistente) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"Já existe um Fornecedor com o nome " + this.fornecedor.getNome() + "!", null));
 
 		} else if (this.fornecedor.getId() == null) {
 			fornecedorDao.adiciona(this.fornecedor);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Fornecedor " + "'" + fornecedor.getNome() + "'" + " cadastrado!"));
 		} else {
 			fornecedorDao.atualiza(this.fornecedor);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Fornecedor " + fornecedor.getNome() + " alterado!"));
 		}
 
@@ -73,11 +73,11 @@ public class FornecedorBean implements Serializable{
 		
 		try {
 			fornecedorDao.remove(fornecedor);
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage("Fornecedor " + fornecedor.getNome() + " removido!"));
 			
 		} catch (PersistenceException e) {
-			FacesContext.getCurrentInstance().addMessage(null,
+			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_WARN, "Não foi possível remover este fornecedor!", null));
 		}
 	}
