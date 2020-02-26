@@ -118,7 +118,32 @@ public class EquipamentoBean implements Serializable{
 		}
 		this.equipamento = new Equipamento();
 	}
+//apenas testando...
+	@Transactional
+	public String salvarNoDialog() {
+		System.out.println("Gravando equipamento " + this.equipamento.getNome());
 
+		boolean patrimonioExistente = new EquipamentoDao().patrimonioExistente(this.equipamento);
+		boolean nomeExistente = new EquipamentoDao().nomeExistente(this.equipamento);
+
+		// para inserção de patrimonio com duplicidade
+		if (patrimonioExistente && this.equipamento.getId() == null) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Já existe um equipamento com este mesmo patrimônio!", null));
+			// para inserção de nome com duplicidade
+		} else if (nomeExistente && this.equipamento.getId() == null) {
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Já existe um equipamento com este mesmo nome!", null));
+		} else {
+			equipamentoDao.adiciona(this.equipamento);
+			context.addMessage(null,
+					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
+		}
+		this.equipamento = new Equipamento();
+		
+		return "PF('equipamentoDialog').show()";
+	}
+	
 	@Transactional
 	public void alterar() {
 		System.out.println("Alterando equipamento " + this.equipamento.getNome());
@@ -166,6 +191,11 @@ public class EquipamentoBean implements Serializable{
 	public void limparPesquisa() {
 		this.equipamento = new Equipamento();
 		PrimeFaces.current().resetInputs("formPesquisa:panelGridPesquisa");
+	}
+	
+	public void limparNovoEquipamento() {
+		this.equipamento = new Equipamento();
+		PrimeFaces.current().resetInputs("formNovoEquipamento:panelGridCadastro");
 	}
 	
 	@Transactional

@@ -15,10 +15,9 @@
 	<ui:define name="conteudo">
 
 		<!-- FORMULÁRIO DE CADASTRO DE EQUIPAMENTOS -->
-
+	<div align="center">
 		<h:form id="formEquipamento">
 
-			<div align="center">
 				<p:fieldset legend="Dados do Equipamento"
 					style="margin-bottom:20px; width:50%;">
 
@@ -129,13 +128,13 @@
 							<p:commandButton value="Salvar" icon="fa fa-fw fa-save"
 								action="#{equipamentoBean.salvar}" style="margin-right:20px;"
 								process="formEquipamento" ajax="false"
-								update=" :formTabelaEquipamentos:tabelaEquipamentos"
+								update=":formTabelaEquipamentos:tabelaEquipamentos"
 								rendered="#{equipamentoBean.exibirBotaoSalvar(equipamento)}" />
 
 							<p:commandButton value="Alterar" id="botaoAlterar"
 								icon="fa fa-fw fa-edit" action="#{equipamentoBean.alterar}"
 								style="margin-right:20px;"
-								process="@form" update="@form :formTabelaEquipamentos:tabelaEquipamentos"
+								process="@form" update=":formTabelaEquipamentos:tabelaEquipamentos"
 								rendered="#{equipamentoBean.exibirBotaoAlterar(equipamento)}" />
 
 							<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
@@ -144,19 +143,17 @@
 								<p:resetInput target="panelGridCadastro" />
 							</p:commandButton>
 						</h:panelGrid>
-
 					</h:panelGrid>
 				</p:fieldset>
-			</div>
-		</h:form>
-
+			</h:form>
+		</div>
 		<!-- TABELA DE EQUIPAMENTOS CADASTRADOS -->
 
 		<h:form id="formTabelaEquipamentos">
 
-			<p:dataTable id="tabelaEquipamentos" var="equipamento"
+			<p:dataTable id="tabelaEquipamentos" var="equipamento" paginator="true" rows="10"
 				value="#{equipamentoBean.equipamentos}"
-				emptyMessage="Nenhum equipamento cadastrado" paginator="true" rows="10"
+				emptyMessage="Nenhum equipamento cadastrado" 
 				style="margin-bottom:20px; text-align:center;">
 
 				<f:facet name="header">
@@ -208,7 +205,7 @@
 						style="float:right;padding-top: 5px;">
 
 						<p:commandButton
-							update=":formTabelaEquipamentos:equipamentoDetalhes"
+							update="formDetalhes:equipamentoDetalhes"
 							oncomplete="PF('equipamentoDialog').show()" title="Visualizar"
 							icon="fa fa-fw fa-search">
 
@@ -230,9 +227,12 @@
 						<p:autoUpdate />
 					</h:panelGrid>
 				</p:column>
-
 			</p:dataTable>
-			
+		</h:form>
+		
+		<!-- JANELA DE DIÁLOGO COM OS DETALHES DO EQUIPAMENTO -->
+		
+		<h:form id="formDetalhes">
 			<p:dialog header="Detalhes do Equipamento"
 				widgetVar="equipamentoDialog" modal="true" showEffect="fade"
 				hideEffect="fade" resizable="false" height="auto" width="auto" >
