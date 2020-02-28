@@ -87,15 +87,6 @@ public class EquipamentoBean implements Serializable{
 		return this.unidade.getDepartamentos();
 	}
 
-	/*
-	 * public void abrirDialogoNovo() { Map<String, Object> opcoes = new
-	 * HashMap<String, Object>(); opcoes.put("modal", true);
-	 * opcoes.put("resizable", false); opcoes.put("contentHeight", 400);
-	 * opcoes.put("contentWidth", 900);
-	 * RequestContext.getCurrentInstance().openDialog("novo_equipamento",
-	 * opcoes, null); }
-	 */
-
 	@Transactional
 	public void salvar() {
 		System.out.println("Gravando equipamento " + this.equipamento.getNome());
@@ -118,31 +109,6 @@ public class EquipamentoBean implements Serializable{
 		}
 		this.equipamento = new Equipamento();
 	}
-//apenas testando...
-	@Transactional
-	public String salvarNoDialog() {
-		System.out.println("Gravando equipamento " + this.equipamento.getNome());
-
-		boolean patrimonioExistente = new EquipamentoDao().patrimonioExistente(this.equipamento);
-		boolean nomeExistente = new EquipamentoDao().nomeExistente(this.equipamento);
-
-		// para inserção de patrimonio com duplicidade
-		if (patrimonioExistente && this.equipamento.getId() == null) {
-			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-					"Já existe um equipamento com este mesmo patrimônio!", null));
-			// para inserção de nome com duplicidade
-		} else if (nomeExistente && this.equipamento.getId() == null) {
-			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
-					"Já existe um equipamento com este mesmo nome!", null));
-		} else {
-			equipamentoDao.adiciona(this.equipamento);
-			context.addMessage(null,
-					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
-		}
-		this.equipamento = new Equipamento();
-		
-		return "PF('equipamentoDialog').show()";
-	}
 	
 	@Transactional
 	public void alterar() {
@@ -151,7 +117,7 @@ public class EquipamentoBean implements Serializable{
 		try {
 			equipamentoDao.atualiza(this.equipamento);
 			context.addMessage(null,
-					new FacesMessage("Equipamento " + equipamento.getNome() + " cadastrado com sucesso!"));
+					new FacesMessage("Equipamento " + equipamento.getNome() + " alterado com sucesso!"));
 
 		} catch (PersistenceException e) {
 			context.addMessage(null,
@@ -204,10 +170,5 @@ public class EquipamentoBean implements Serializable{
 		equipamentoDao.remove(equipamento);
 		context.addMessage(null,
 				new FacesMessage("Equipamento " + equipamento.getNome() + " removido!"));
-	}
-
-/*	public void carregarEquipamentoPelaId() {
-		this.equipamento = equipamentoDao.buscaPorId(this.equipamento.getId());
-	}*/
-	
+	}	
 }

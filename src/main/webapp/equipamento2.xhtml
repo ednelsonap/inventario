@@ -11,20 +11,10 @@
 	<ui:define name="conteudo">
 
 		<!-- FORMULÁRIO DE CADASTRO DE EQUIPAMENTOS -->
-
-		<h:form id="formEquipamento">
-			<h:panelGrid>		
-				<p:commandButton
-					value="Novo" type="button" onclick="PF('equipamentoDialog').show()" 
-					title="Novo" icon="ui-icon-plus">
-				</p:commandButton>
-			</h:panelGrid>
-		</h:form>
 		
 		<h:form id="formNovoEquipamento">
-		<p:dialog header="Detalhes do Equipamento"
-				widgetVar="equipamentoDialog" modal="true" showEffect="fade"
-				hideEffect="fade" resizable="false" height="auto" width="auto" >
+		<p:dialog header="Cadastro de Equipamento"
+				widgetVar="equipamentoDialog" modal="true" resizable="false" height="auto" width="auto" >
 				<div align="center">
 				<p:outputPanel id="equipamentoDetalhes" style="horizontal-align:center;" >
 					<h:panelGrid id="panelGridCadastro">
@@ -129,18 +119,17 @@
 							<h:outputText id="display" />
 						</h:panelGrid>
 
-
 						<h:panelGrid columns="3">
 							<p:commandButton value="Salvar" icon="fa fa-fw fa-save"
-								action="#{equipamentoBean.salvarNoDialog}" style="margin-right:20px;"
-								process="@form" ajax="false"
-								update=" :formTabelaEquipamentos:tabelaEquipamentos"
+								action="#{equipamentoBean.salvar}" style="margin-right:20px;"
+								process="formNovoEquipamento" ajax="false"
+								update=":formTabelaEquipamentos:tabelaEquipamentos"
 								rendered="#{equipamentoBean.exibirBotaoSalvar(equipamento)}" />
 
 							<p:commandButton value="Alterar" id="botaoAlterar"
 								icon="fa fa-fw fa-edit" action="#{equipamentoBean.alterar}"
 								style="margin-right:20px;"
-								process="@form" update="@form :formTabelaEquipamentos:tabelaEquipamentos"
+								process="formNovoEquipamento" update="@form :formTabelaEquipamentos:tabelaEquipamentos"
 								rendered="#{equipamentoBean.exibirBotaoAlterar(equipamento)}" />
 
 							<p:commandButton value="Limpar" icon="fa fa-fw fa-eraser"
@@ -161,14 +150,23 @@
 		<h:form id="formTabelaEquipamentos">
 
 			<p:dataTable id="tabelaEquipamentos" var="equipamento"
-				value="#{equipamentoBean.equipamentos}" paginator="true"
-				lazy="true" rows="10"
+				value="#{equipamentoBean.equipamentos}" paginator="true" rows="10"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} registros"
+                rowsPerPageTemplate="10,20,50,100"
 				style="margin-bottom:20px; font-size: 12px; text-align:center;">
 
 				<f:facet name="header">
 					Equipamentos
 				</f:facet>
-
+				
+				<f:facet name="paginatorTopLeft">
+            		<p:commandButton
+						value="Novo" type="button" onclick="PF('equipamentoDialog').show()" 
+						title="Novo" icon="ui-icon-plus">
+					</p:commandButton>
+        		</f:facet>
+        		
 				<p:column headerText="Data de Cadastro"
 					sortBy="#{equipamento.dataCadastro.time}">
 					<h:outputText value="#{equipamento.dataCadastro.time}">
@@ -207,24 +205,24 @@
 				</p:column>
 
 				<p:column headerText="Unidade"
-					sortBy="#{equipamentos.departamento.unidade}"
+					sortBy="#{equipamento.departamento.unidade}"
 					filterBy="#{equipamento.departamento.unidade.nome}"
 					filterMatchMode="contains">
 					<h:outputText value="#{equipamento.departamento.unidade.nome}" />
 				</p:column>
 
 				<p:column headerText="Departamento"
-					sortBy="#{equipamentos.departamento}"
+					sortBy="#{equipamento.departamento}"
 					filterBy="#{equipamento.departamento}" filterMatchMode="contains">
 					<h:outputText value="#{equipamento.departamento.nome}" />
 				</p:column>
 
-				<p:column headerText="Marca" sortBy="#{equipamento.marca}"
+				<p:column headerText="Marca"
 					filterBy="#{equipamento.marca}" filterMatchMode="contains">
 					<h:outputText value="#{equipamento.marca}" />
 				</p:column>
 
-				<p:column headerText="Modelo" sortBy="#{equipamento.modelo}"
+				<p:column headerText="Modelo"
 					filterBy="#{equipamento.modelo}" filterMatchMode="contains">
 					<h:outputText value="#{equipamento.modelo}" />
 				</p:column>
@@ -234,26 +232,29 @@
 					<h:outputText value="#{equipamento.ip}" />
 				</p:column>
 
-				<p:column headerText="Observação">
+				<p:column headerText="Observação"
+					filterBy="#{equipamento.observacao}" filterMatchMode="contains">
 					<h:outputText value="#{equipamento.observacao}" />
 				</p:column>
 
 				<p:column headerText="Ações" style="width: 150px;">
+					
 					<h:panelGrid id="panelGridAcoes" columns="2"
 						style="float:right;padding-top: 5px;">
 
-						<p:commandButton update=":formEquipamento" icon="fa fa-fw fa-edit"
-							title="Alterar">
+						<p:commandButton process="@form" update=":formNovoEquipamento" icon="fa fa-fw fa-edit"
+							title="Alterar" oncomplete="PF('equipamentoDialog').show()">
 							<f:setPropertyActionListener value="#{equipamento}"
 								target="#{equipamentoBean.equipamento}" />
 						</p:commandButton>
 
 						<p:commandButton icon="fa fa-fw fa-trash"
-							action="#{equipamentoBean.remover(equipamento)}" title="Excluir"
-							update="@form :formTabelaEquipamentos">
+							actionListener="#{equipamentoBean.remover(equipamento)}" ajax="false" title="Excluir"
+							process="@form" update="tabelaEquipamentos" >
 						</p:commandButton>
 
 					</h:panelGrid>
+		
 				</p:column>
 
 			</p:dataTable>

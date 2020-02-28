@@ -3,7 +3,6 @@ package br.com.spdm.inventario.model;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,7 +22,6 @@ public class Departamento implements Serializable{
 	private Integer id;
 	private String nome;
 	@ManyToOne(cascade=CascadeType.MERGE, fetch=FetchType.EAGER)
-	//@JoinColumn(name="unidade_id")
 	private Unidade unidade;
 	
 	public Integer getId() {
